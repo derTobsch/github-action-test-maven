@@ -13,6 +13,7 @@ jobs:
         uses: docker://decathlon/release-notes-generator-action:2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT_FOLDER: "changelogs"
           USE_MILESTONE_TITLE: "true"
       - name: Create Draft Release
         id: create_release
@@ -23,13 +24,13 @@ jobs:
           tag_name: test-${{ github.event.milestone.title }}
           release_name: Release Test ${{ github.event.milestone.title }}
           draft: true
-          body_path: "./${{ github.event.milestone.title }}.md"
+          body_path: "./changelogs/${{ github.event.milestone.title }}.md"
       - name: set name and email
         run: git config --global user.email "releases@example.org"; git config --global user.name "Bob the Builder";
       - name: Set New Version
         run: ./mvnw versions:set -DnewVersion=${{ github.event.milestone.title }}
       - name: Commit New Version
-        run: git add . && git commit -m "New Release Version test-${{ github.event.milestone.title }}"
+        run: git add pom.xml && git commit -m "New Release Version test-${{ github.event.milestone.title }}"
       - name: add tag
         run: git tag -a -m "test-${{ github.event.milestone.title }}" test-${{ github.event.milestone.title }}
       - name: push tag
@@ -37,6 +38,6 @@ jobs:
       - name: Set Next Version
         run: ./mvnw versions:set -DnewVersion=${{ github.event.milestone.title }}-SNAPSHOT
       - name: Commit NEXT Version
-        run: git add . && git commit -m "Prepare Next Snapshot Version test-${{ github.event.milestone.title }}-SNAPSHOT"
+        run: git add pom.xml && git commit -m "Prepare Next Snapshot Version test-${{ github.event.milestone.title }}-SNAPSHOT"
       - name: Push Next Version
         run: git push
