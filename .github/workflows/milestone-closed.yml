@@ -16,16 +16,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USE_MILESTONE_TITLE: "true"
-      - name: Create Draft Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: test-${{ github.event.milestone.title }}
-          release_name: Release Test ${{ github.event.milestone.title }}
-          draft: true
-          body_path: "./${{ github.event.milestone.title }}.md"
       - name: set name and email
         run: git config --global user.email "releases@example.org"; git config --global user.name "Bob the Builder";
       - name: Set New Version
