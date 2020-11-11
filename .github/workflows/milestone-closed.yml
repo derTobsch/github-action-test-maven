@@ -1,0 +1,40 @@
+# Trigger the workflow on milestone events
+on:
+  milestone:
+    types: [ closed ]
+
+name: Release Notes
+jobs:
+  create-release-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Create Release Notes
+        uses: docker://decathlon/release-notes-generator-action:2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          USE_MILESTONE_TITLE: "true"
+      - name: Create Draft Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: test-${{ github.event.milestone.title }}
+          release_name: Release Test ${{ github.event.milestone.title }}
+          draft: true
+          body_path: "./${{ github.event.milestone.title }}.md"
+      - name: set name and email
+        run: git config --global user.email "releases@example.org"; git config --global user.name "Bob the Builder";
+      - name: Set New Version
+        run: ./mvnw versions:set -DnewVersion=${{ github.event.milestone.title }}
+      - name: Commit New Version
+        run: git add . && git commit -m "New Release Version test-${{ github.event.milestone.title }}"
+      - name: add tag
+        run: git tag -a -m "test-${{ github.event.milestone.title }}" test-${{ github.event.milestone.title }}
+      - name: push tag
+        run: git push --follow-tags
+      - name: Set Next Version
+        run: ./mvnw versions:set -DnewVersion=${{ github.event.milestone.title }}-SNAPSHOT
+      - name: Commit NEXT Version
+        run: git add . && git commit -m "Prepare Next Snapshot Version test-${{ github.event.milestone.title }}-SNAPSHOT"
