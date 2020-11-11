@@ -18,13 +18,13 @@ jobs:
         run: ./mvnw --batch-mode clean verify
       - name: Extract release tag
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/test-}
+        run: echo ::set-output name=version::${GITHUB_REF#refs/*/test-}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: test-${{ github.ref }}
-          release_name: Release Test ${{ github.ref }}
-          body_path: "./${{ steps.vars.outputs.tag }}.md"
+          tag_name: ${{ github.ref }}
+          release_name: Release Test ${{ steps.vars.outputs.version }}
+          body_path: "./${{ steps.vars.outputs.version }}.md"
