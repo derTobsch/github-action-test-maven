@@ -8,7 +8,9 @@ jobs:
   create-release-notes:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
       - name: Create Release Notes
         uses: docker://decathlon/release-notes-generator-action:2.0.1
         env:
