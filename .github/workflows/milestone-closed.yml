@@ -38,3 +38,5 @@ jobs:
         run: ./mvnw versions:set -DnewVersion=${{ github.event.milestone.title }}-SNAPSHOT
       - name: Commit NEXT Version
         run: git add . && git commit -m "Prepare Next Snapshot Version test-${{ github.event.milestone.title }}-SNAPSHOT"
+      - name: Push Next Version
+        run: git push
