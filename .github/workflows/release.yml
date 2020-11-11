@@ -14,12 +14,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
       - name: Build with Maven
         run: ./mvnw --batch-mode clean verify
       - name: Create Release
@@ -30,17 +24,4 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           draft: false
-      - name: Extract release tag
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-      - name: Upload Release Asset
-        id: upload_release_asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/${{ steps.vars.outputs.tag }}.war
-          asset_name: ${{ steps.vars.outputs.tag }}.war
-          asset_content_type: application/zip
 
