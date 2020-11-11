@@ -15,7 +15,6 @@ jobs:
         uses: docker://decathlon/release-notes-generator-action:2.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILENAME_PREFIX: urlaubsverwaltung-
           USE_MILESTONE_TITLE: "true"
       - name: set name and email
         run: git config --global user.email "releases@example.org"; git config --global user.name "Bob the Builder";
