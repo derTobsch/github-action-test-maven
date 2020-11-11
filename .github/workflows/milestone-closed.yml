@@ -21,7 +21,7 @@ jobs:
       - name: Set New Version
         run: ./mvnw versions:set -DnewVersion=${{ github.event.milestone.title }}
       - name: Commit New Version
-        run: git add pom.xml && git commit -m "New Release Version test-${{ github.event.milestone.title }}"
+        run: git add . && git commit -m "New Release Version test-${{ github.event.milestone.title }}"
       - name: add tag
         run: git tag -a -m "test-${{ github.event.milestone.title }}" test-${{ github.event.milestone.title }}
       - name: push tag
@@ -29,6 +29,6 @@ jobs:
       - name: Set Next Version
         run: ./mvnw versions:set -DnewVersion=${{ github.event.milestone.title }}-SNAPSHOT
       - name: Commit NEXT Version
-        run: git add pom.xml && git commit -m "Prepare Next Snapshot Version test-${{ github.event.milestone.title }}-SNAPSHOT"
+        run: git add . && git commit -m "Prepare Next Snapshot Version test-${{ github.event.milestone.title }}-SNAPSHOT"
       - name: Push Next Version
         run: git push
