@@ -16,3 +16,5 @@ changelog:
       labels: ["type: documentation"]
   contributors:
     title: "❤️ Contributors"
+    exclude:
+      names: [ "dependabot" ]
