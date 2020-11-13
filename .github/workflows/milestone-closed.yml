@@ -12,7 +12,7 @@ jobs:
         with:
           token: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
       - name: Create Release Notes
-        uses: focus-shift/release-notes-generator-action@3.0.1
+        uses: focus-shift/release-notes-generator-action@3.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           USE_MILESTONE_TITLE: "true"
