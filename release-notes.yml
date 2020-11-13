@@ -1,4 +1,5 @@
 changelog:
+  repository: derTobsch/github-action-test-maven
   sections:
     - title: "⚠️ Security Issues"
       labels: ["type: security"]
