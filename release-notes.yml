@@ -1,0 +1,18 @@
+changelog:
+  sections:
+    - title: "⚠️ Security Issues"
+      labels: ["type: security"]
+    - title: "⭐ Enhancements"
+      labels: ["type: enhancement"]
+    - title: "🐞 Bugs"
+      labels: ["type: bug"]
+    - title: "💥 Breaking Changes"
+      labels: ["type: breaking"]
+    - title: "🚮 Deprecation"
+      labels: ["type: deprecation"]
+    - title: "🔨 Dependency upgrades"
+      labels: ["type: dependencies"]
+    - title: "📝 Documentation"
+      labels: ["type: documentation"]
+  contributors:
+    title: "❤️ Contributors"
