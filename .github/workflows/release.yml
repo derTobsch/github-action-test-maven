@@ -1,30 +1,44 @@
-name: Release
+name: Release Trigger
 
 on:
-  push:
-    tags:
-      - '*'
+  workflow_dispatch:
+    inputs:
+      milestoneId:
+        description: 'Milestone ID'
+        required: true
+        default: '1'
+      releaseVersion:
+        description: 'Release version'
+        required: true
+        default: 'x.xx.x'
+      nextVersion:
+        description: 'Next version'
+        required: true
+        default: 'x.xx.x-SNAPSHOT'
+
+env:
+  MAVEN_ARGS: "--no-transfer-progress --errors --fail-at-end --show-version"
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+  trigger-release:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
+      - uses: actions/checkout@v4
         with:
+          persist-credentials: false
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
           java-version: 11
-      - name: Build with Maven
-        run: ./mvnw --batch-mode clean verify
-      - name: Extract release tag
-        id: vars
-        run: echo ::set-output name=version::${GITHUB_REF#refs/*/test-}
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          cache: 'maven'
+      - name: Build
+        run: ./mvnw verify
+      - name: Create Release Notes
+        uses: spring-io/github-changelog-generator@v0.0.12
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release Test ${{ steps.vars.outputs.version }}
-          body_path: "./${{ steps.vars.outputs.version }}.md"
+          milestone: ${{ github.event.inputs.milestoneId }}
+          changelog-file: ${{format('{0}{1}{2}', '.chglog/', github.event.inputs.releaseVersion, '.md')}}
+          config-file: '.github/release-notes.yml'
+          token: ${{ secrets.GITHUB_TOKEN }}
+
