@@ -37,7 +37,7 @@ jobs:
       - name: Create Release Notes
         uses: spring-io/github-changelog-generator@v0.0.12
         with:
-          milestone: ${{ github.event.inputs.milestoneId }}
+          milestone: ${{ github.event.inputs.releaseVersion }}
           changelog-file: ${{format('{0}{1}{2}', '.chglog/', github.event.inputs.releaseVersion, '.md')}}
           config-file: '.github/release-notes.yml'
           token: ${{ secrets.GITHUB_TOKEN }}
